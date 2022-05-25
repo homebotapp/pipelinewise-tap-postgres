@@ -124,7 +124,7 @@ class TestLogicalInterruption:
         mock_connect.assert_called_with(**expected_connection)
         mock_connect.reset_mock()
 
-        assert 7 == len(CAUGHT_MESSAGES)
+        self.assertEqual(7, len(CAUGHT_MESSAGES), "Number of Caught Messages")
 
         assert CAUGHT_MESSAGES[0]['type'] =='SCHEMA'
         assert isinstance(CAUGHT_MESSAGES[1], singer.StateMessage)
