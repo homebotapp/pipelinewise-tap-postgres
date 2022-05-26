@@ -57,6 +57,7 @@ def open_connection(conn_config, logical_replication=False):
 
     return conn
 
+
 def prepare_columns_for_select_sql(c, md_map):
     column_name = f' "{canonicalize_identifier(c)}" '
 
@@ -69,6 +70,7 @@ def prepare_columns_for_select_sql(c, md_map):
                    f'ELSE {column_name} ' \
                    f'END AS {column_name}'
     return column_name
+
 
 def prepare_columns_sql(c):
     column_name = f""" "{canonicalize_identifier(c)}" """
