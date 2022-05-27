@@ -111,6 +111,32 @@ class TestDbFunctions(unittest.TestCase):
                                               )
         )
 
+    def test_prepare_columns_for_select_sql_with_date_column(self):
+        self.assertEqual(
+            'CASE WHEN  "my_column"  < \'0001-01-01\' OR '
+            ' "my_column"  > \'9999-12-31\' THEN \'9999-12-31\' '
+            'ELSE  "my_column"  END AS  "my_column" ',
+            db.prepare_columns_for_select_sql('my_column',
+                                              {
+                                                  ('properties', 'my_column'): {
+                                                      'sql-datatype': 'date'
+                                                  }
+                                              }
+                                              )
+        )
+
+    def test_prepare_columns_for_select_sql_with_date_array_column(self):
+        self.assertEqual(
+            ' "my_column" ',
+            db.prepare_columns_for_select_sql('my_column',
+                                              {
+                                                  ('properties', 'my_column'): {
+                                                      'sql-datatype': 'date[]'
+                                                  }
+                                              }
+                                              )
+        )
+
     def test_prepare_columns_for_select_sql_with_not_timestamp_column(self):
         self.assertEqual(
             ' "my_column" ',

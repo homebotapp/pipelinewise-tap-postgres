@@ -71,12 +71,19 @@ def prepare_columns_for_select_sql(c, md_map):
 
     if ('properties', c) in md_map:
         sql_datatype = md_map[('properties', c)]['sql-datatype']
-        if sql_datatype.startswith('timestamp') and not sql_datatype.endswith('[]'):
-            return f'CASE ' \
-                   f'WHEN {column_name} < \'0001-01-01 00:00:00.000\' ' \
-                   f'OR {column_name} > \'9999-12-31 23:59:59.999\' THEN \'9999-12-31 23:59:59.999\' ' \
-                   f'ELSE {column_name} ' \
-                   f'END AS {column_name}'
+        if not sql_datatype.endswith('[]'):
+            if sql_datatype.startswith('timestamp'):
+                return f'CASE ' \
+                       f'WHEN {column_name} < \'0001-01-01 00:00:00.000\' ' \
+                       f'OR {column_name} > \'9999-12-31 23:59:59.999\' THEN \'9999-12-31 23:59:59.999\' ' \
+                       f'ELSE {column_name} ' \
+                       f'END AS {column_name}'
+            elif sql_datatype == 'date':
+                return f'CASE ' \
+                       f'WHEN {column_name} < \'0001-01-01\' ' \
+                       f'OR {column_name} > \'9999-12-31\' THEN \'9999-12-31\' ' \
+                       f'ELSE {column_name} ' \
+                       f'END AS {column_name}'
     return column_name
 
 
